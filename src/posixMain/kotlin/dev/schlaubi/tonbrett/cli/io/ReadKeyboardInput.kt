@@ -3,8 +3,6 @@ package dev.schlaubi.tonbrett.cli.io
 import kotlinx.cinterop.*
 import platform.posix.*
 
-actual val pressedKeys = emptyList<Key>()
-
 actual fun readByteFromStdin(): Key = memScoped {
     val term = alloc<termios>()
     tcgetattr(STDIN_FILENO, term.ptr)

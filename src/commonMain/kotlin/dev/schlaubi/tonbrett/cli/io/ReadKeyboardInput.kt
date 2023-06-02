@@ -24,8 +24,6 @@ data class Key(val virtualId: Int?, val asciiChar: Char?) {
     }
 }
 
-expect val pressedKeys: List<Key>
-
 val keyEvents: Flow<Key> = flow {
     while (true) {
         emit(readByteFromStdin())

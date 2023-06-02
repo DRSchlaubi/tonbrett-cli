@@ -4,9 +4,6 @@ import kotlinx.cinterop.*
 import platform.windows.*
 
 
-private val _pressedKeys = mutableListOf<Key>()
-actual val pressedKeys: List<Key> get() = _pressedKeys
-
 actual fun readByteFromStdin(): Key = memScoped {
     val handle = GetStdHandle(STD_INPUT_HANDLE)
     val modePtr = alloc<DWORDVar>()
@@ -41,10 +38,8 @@ actual fun readByteFromStdin(): Key = memScoped {
             val asciiChar = keyEvent.uChar.AsciiChar.toInt().takeIf { it > 0 }?.toChar()
             val key = Key(keyId, asciiChar)
             if (keyEvent.bKeyDown != 0) {
-                _pressedKeys.add(key)
                 continue
             } else {
-                _pressedKeys.remove(key)
                 return@memScoped key
             }
         }

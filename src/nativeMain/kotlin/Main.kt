@@ -10,9 +10,7 @@ import com.jakewharton.mosaic.ui.Row
 import com.jakewharton.mosaic.ui.Text
 import dev.schlaubi.tonbrett.cli.components.Spacer
 import dev.schlaubi.tonbrett.cli.components.Spinner
-import dev.schlaubi.tonbrett.cli.io.Keys
 import dev.schlaubi.tonbrett.cli.io.keyEvents
-import dev.schlaubi.tonbrett.cli.io.pressedKeys
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
