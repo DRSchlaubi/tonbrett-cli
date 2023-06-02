@@ -1,7 +1,6 @@
 package dev.schlaubi.tonbrett.cli.io
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 object Keys {
     val Ctrl = Key(17, null)
@@ -24,10 +23,4 @@ data class Key(val virtualId: Int?, val asciiChar: Char?) {
     }
 }
 
-val keyEvents: Flow<Key> = flow {
-    while (true) {
-        emit(readByteFromStdin())
-    }
-}
-
-expect fun readByteFromStdin(): Key
+expect val keyEvents: Flow<Key>

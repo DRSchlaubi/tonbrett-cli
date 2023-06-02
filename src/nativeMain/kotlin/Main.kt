@@ -1,6 +1,9 @@
 package dev.schlaubi.tonbrett.cli
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.jakewharton.mosaic.runMosaicBlocking
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Row
@@ -8,9 +11,11 @@ import com.jakewharton.mosaic.ui.Text
 import dev.schlaubi.tonbrett.cli.components.Spacer
 import dev.schlaubi.tonbrett.cli.components.Spinner
 import dev.schlaubi.tonbrett.cli.io.keyEvents
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 import kotlin.system.exitProcess
-import kotlin.time.Duration.Companion.seconds
 
 fun main() = runMosaicBlocking {
     var lastPressedKey by mutableStateOf<String?>(null)

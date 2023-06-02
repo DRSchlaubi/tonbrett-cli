@@ -1,10 +1,17 @@
 package dev.schlaubi.tonbrett.cli.io
 
 import kotlinx.cinterop.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import platform.windows.*
 
+actual val keyEvents: Flow<Key> = flow {
+    while (true) {
+        emit(readByteFromStdin())
+    }
+}
 
-actual fun readByteFromStdin(): Key = memScoped {
+private fun readByteFromStdin(): Key = memScoped {
     val handle = GetStdHandle(STD_INPUT_HANDLE)
     val modePtr = alloc<DWORDVar>()
     if (GetConsoleMode(handle, modePtr.ptr) == 0) {
