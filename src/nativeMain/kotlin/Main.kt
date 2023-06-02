@@ -1,9 +1,6 @@
 package dev.schlaubi.tonbrett.cli
 
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import com.jakewharton.mosaic.runMosaicBlocking
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Row
@@ -11,21 +8,20 @@ import com.jakewharton.mosaic.ui.Text
 import dev.schlaubi.tonbrett.cli.components.Spacer
 import dev.schlaubi.tonbrett.cli.components.Spinner
 import dev.schlaubi.tonbrett.cli.io.keyEvents
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import kotlin.system.exitProcess
 import kotlin.time.Duration.Companion.seconds
 
 fun main() = runMosaicBlocking {
     var lastPressedKey by mutableStateOf<String?>(null)
+    val exitCode = CompletableDeferred<Int>()
+
     setContent {
         LaunchedEffect(Unit) {
             withContext(Dispatchers.IO) {
                 keyEvents.collect {
                     if (it.asciiChar == '') {
-                        exitProcess(0)
+                        exitCode.complete(0)
                     } else {
                         lastPressedKey = if (it.asciiChar == null) {
                             it.virtualId.toString()
@@ -50,5 +46,5 @@ fun main() = runMosaicBlocking {
         }
     }
 
-    delay(50000.seconds)
+    exitProcess(exitCode.await())
 }

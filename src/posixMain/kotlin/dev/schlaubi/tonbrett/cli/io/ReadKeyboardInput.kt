@@ -17,7 +17,7 @@ actual fun readByteFromStdin(): Key = memScoped {
 
     if (bytesRead == 1L) {
         val virtualId = bytePointer.value.toInt()
-        Key(virtualId, null)
+        Key(virtualId, virtualId.toChar())
     } else {
         error("Could not read key")
     }
