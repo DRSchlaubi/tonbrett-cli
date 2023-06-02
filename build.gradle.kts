@@ -15,8 +15,18 @@ repositories {
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
+    targetHierarchy.default {
+        common {
+            group("posix") {
+                withApple()
+                withLinux()
+            }
+        }
+    }
     mingwX64()
+
+    macosArm64()
+    macosX64()
 
     targets {
         withType<KotlinNativeTarget> {
