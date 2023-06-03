@@ -20,14 +20,14 @@ actual val keyEvents: Flow<Key> = flow {
         if (currentChar == firstArrowEscape && buffer.isEmpty()) {
             buffer = listOf(currentChar)
             continue
-        }
-        if(currentChar == secondArrowEscape && buffer.firstOrNull() == firstArrowEscape ) {
+        } else if (currentChar == secondArrowEscape && buffer.firstOrNull() == firstArrowEscape) {
             buffer += currentChar
             continue
+        } else {
+            emit(Key(currentChar, currentChar.toChar()))
         }
-
         if (buffer == listOf(firstArrowEscape, secondArrowEscape)) {
-            val key = when(currentChar) {
+            val key = when (currentChar) {
                 arrowUp -> Keys.DirectionUp
                 arrowDown -> Keys.DirectionDown
                 arrowRight -> Keys.DirectionRight
