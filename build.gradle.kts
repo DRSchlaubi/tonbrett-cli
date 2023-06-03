@@ -26,15 +26,18 @@ kotlin {
         }
     }
     mingwX64()
-
     macosArm64()
     macosX64()
 
     targets {
         withType<KotlinNativeTarget> {
+            val targetName = name
             binaries {
                 executable {
                     entryPoint = "dev.schlaubi.tonbrett.cli.main"
+                    if ("Arm" in targetName) {
+                        baseName = "tonbrett-cli-arm"
+                    }
                 }
             }
         }
