@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform") version "1.8.20"
@@ -25,20 +24,25 @@ kotlin {
             }
         }
     }
-    mingwX64()
-    macosArm64()
-    macosX64()
 
-    targets {
-        withType<KotlinNativeTarget> {
-            val targetName = name
-            binaries {
-                executable {
-                    entryPoint = "dev.schlaubi.tonbrett.cli.main"
-                    if ("Arm" in targetName) {
-                        baseName = "tonbrett-cli-arm"
-                    }
-                }
+    mingwX64 {
+        binaries {
+            executable {
+                baseName = "tonbrett-cli-windows-x64"
+            }
+        }
+    }
+    macosArm64 {
+        binaries {
+            executable {
+                baseName = "tonbrett-cli-maocs-arm64"
+            }
+        }
+    }
+    macosX64 {
+        binaries {
+            executable {
+                baseName = "tonbrett-cli-maocs-x64"
             }
         }
     }
