@@ -7,10 +7,17 @@ import platform.posix.*
 
 private const val firstArrowEscape = 27
 private const val secondArrowEscape = 91
-private const val arrowUp = 65
-private const val arrowDown = 66
-private const val arrowLeft = 68
-private const val arrowRight = 67
+
+actual object Keys {
+    actual val Enter = Key(13, null)
+    actual val Tab = Key(9, null)
+    actual val Space = Key(32, null)
+    actual val Backspace = Key(127, null)
+    actual val DirectionUp = Key(65, null)
+    actual val DirectionDown = Key(66, null)
+    actual val DirectionRight = Key(67, null)
+    actual val DirectionLeft = Key(68, null)
+}
 
 @Suppress("SuspiciousCollectionReassignment")
 actual val keyEvents: Flow<Key> = flow {
@@ -27,14 +34,7 @@ actual val keyEvents: Flow<Key> = flow {
             emit(Key(currentChar, currentChar.toChar()))
         }
         if (buffer == listOf(firstArrowEscape, secondArrowEscape)) {
-            val key = when (currentChar) {
-                arrowUp -> Keys.DirectionUp
-                arrowDown -> Keys.DirectionDown
-                arrowRight -> Keys.DirectionRight
-                arrowLeft -> Keys.DirectionLeft
-                else -> error("Unknown arrow type: $currentChar")
-            }
-            emit(key)
+            emit(Key(currentChar, null))
         } else {
             buffer.forEach {
                 emit(Key(it, it.toChar()))

@@ -23,16 +23,15 @@ fun ProvideKeyEvents(content: Content) {
     )
 }
 
-object Keys {
-    val Ctrl = Key(17, null)
-    val Enter = Key(10, null)
-    val Tab = Key(9, null)
-    val Space = Key(32, null)
-    val Backspace = Key(127, null)
-    val DirectionLeft = Key(37, null)
-    val DirectionUp = Key(38, null)
-    val DirectionRight = Key(39, null)
-    val DirectionDown = Key(40, null)
+expect object Keys {
+    val Enter: Key
+    val Tab: Key
+    val Space: Key
+    val Backspace: Key
+    val DirectionLeft: Key
+    val DirectionUp: Key
+    val DirectionRight: Key
+    val DirectionDown: Key
 }
 
 data class Key(val virtualId: Int?, val asciiChar: Char?) {

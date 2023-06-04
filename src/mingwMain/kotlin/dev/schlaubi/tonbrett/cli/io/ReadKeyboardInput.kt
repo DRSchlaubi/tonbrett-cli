@@ -5,6 +5,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import platform.windows.*
 
+actual object Keys {
+    actual val Enter = Key(13, null)
+    actual val Tab = Key(9, null)
+    actual val Space = Key(32, null)
+    actual val Backspace = Key(127, null)
+    actual val DirectionLeft = Key(37, null)
+    actual val DirectionUp = Key(38, null)
+    actual val DirectionRight = Key(39, null)
+    actual val DirectionDown = Key(40, null)
+}
+
 actual val keyEvents: Flow<Key> = flow {
     while (true) {
         emit(readByteFromStdin())
