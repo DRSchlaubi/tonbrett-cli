@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform") version "1.8.20"
@@ -21,6 +23,16 @@ kotlin {
             group("posix") {
                 withApple()
                 withLinux()
+            }
+        }
+    }
+
+    targets {
+        withType<KotlinNativeTarget> {
+            binaries {
+                withType<Executable> {
+                    entryPoint = "dev.schlaubi.tonbrett.cli.main"
+                }
             }
         }
     }

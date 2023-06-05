@@ -12,7 +12,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filter
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.milliseconds
 
 val LocalExitCode =
     compositionLocalOf<CompletableDeferred<Int>> { throw UnsupportedOperationException("No default value supported") }
@@ -21,7 +21,7 @@ val LocalExitCode =
 fun exitProcess(exitCode: Int = 0) = LocalExitCode.current.complete(exitCode)
 
 @Composable
-fun exitAfter(delay: Duration = 200.seconds, exitCode: Int = 0) {
+fun exitAfter(delay: Duration = 200.milliseconds, exitCode: Int = 0) {
     val exitCodeCompletable = LocalExitCode.current
     LaunchedEffect(Unit) {
         delay(delay)
