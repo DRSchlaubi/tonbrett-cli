@@ -1,7 +1,7 @@
 # Installation
 ## Windows
 
-**Note:** Since conhost is a piece of junk you need the new [Windows Termina Appl(https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701)
+**Note:** Since conhost is a piece of junk you need the new [Windows Terminal App](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701)
 
 Run this script in Powershell
 ```powershell
