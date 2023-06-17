@@ -60,7 +60,7 @@ fun SoundList(api: Tonbrett) {
     }
 
     LaunchedEffect(Unit) {
-        launch { api.connect() }
+        launch { api.connect(useUnicode = true) }
         api.events.onEach {
             val currentState = state
             when (it) {

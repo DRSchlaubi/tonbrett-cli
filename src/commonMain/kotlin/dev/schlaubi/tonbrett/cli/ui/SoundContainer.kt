@@ -32,27 +32,22 @@ fun SoundContainer(api: Tonbrett, state: State.Running, updateState: (State) -> 
     }
 
     LaunchedEffect(Unit) {
-        updateState(state.copy(sounds = api.getSounds()))
+        updateState(state.copy(sounds = api.getSounds(useUnicode = true)))
         loading = false
     }
 
     LaunchedEffect(Unit) {
-        searchFlow
-            .debounce(300.milliseconds)
-            .onEach {
-                updateState(state.copy(sounds = api.getSounds(query = it, onlyMine = onlyMine)))
-            }
-            .launchIn(this)
+        searchFlow.debounce(300.milliseconds).onEach {
+            updateState(state.copy(sounds = api.getSounds(query = it, onlyMine = onlyMine, useUnicode = true)))
+        }.launchIn(this)
     }
 
     LaunchedEffect(onlyMine) {
-        keyEvents
-            .filter { it == Keys.Tab }
-            .collect {
-                onlyMine = !onlyMine
+        keyEvents.filter { it == Keys.Tab }.collect {
+            onlyMine = !onlyMine
 
-                updateState(state.copy(sounds = api.getSounds(query = search, onlyMine = onlyMine)))
-            }
+            updateState(state.copy(sounds = api.getSounds(query = search, onlyMine = onlyMine, useUnicode = true)))
+        }
     }
 
     if (loading) {
@@ -71,24 +66,19 @@ private data class SoundRowKey(val selected: Boolean, val playing: Boolean)
 
 @Composable
 private fun SoundRow(
-    api: Tonbrett,
-    sound: Sound,
-    selected: Boolean,
-    playing: Boolean
+    api: Tonbrett, sound: Sound, selected: Boolean, playing: Boolean
 ) = Row {
     val keyEvents = LocalKeyEvents.current
 
     LaunchedEffect(SoundRowKey(selected, playing)) {
         if (selected) {
-            keyEvents
-                .filter { it == Keys.Enter || it == Keys.Space }
-                .collect {
-                    if (playing) {
-                        api.stop()
-                    } else {
-                        api.play(sound.id.toString())
-                    }
+            keyEvents.filter { it == Keys.Enter || it == Keys.Space }.collect {
+                if (playing) {
+                    api.stop()
+                } else {
+                    api.play(sound.id.toString())
                 }
+            }
         }
     }
 
