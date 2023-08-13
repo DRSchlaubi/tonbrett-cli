@@ -17,11 +17,11 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 sealed interface State {
-    object Loading : State
-    object Offline : State
-    object ChannelMismatch : State
-    object PlayerUnavailable : State
-    object SessionExpired : State
+    data object Loading : State
+    data object Offline : State
+    data object ChannelMismatch : State
+    data object PlayerUnavailable : State
+    data object SessionExpired : State
 
     data class Running(
         val sounds: List<Sound> = emptyList(),

@@ -2,11 +2,8 @@ package dev.schlaubi.tonbrett.cli.ui
 
 import androidx.compose.runtime.*
 import com.jakewharton.mosaic.ui.*
-import dev.schlaubi.tonbrett.cli.components.Loading
-import dev.schlaubi.tonbrett.cli.components.NavigableList
-import dev.schlaubi.tonbrett.cli.components.Spacer
-import dev.schlaubi.tonbrett.cli.components.TextInputField
-import dev.schlaubi.tonbrett.cli.io.Keys
+import com.varabyte.kotter.foundation.input.Keys
+import dev.schlaubi.tonbrett.cli.components.*
 import dev.schlaubi.tonbrett.cli.io.LocalKeyEvents
 import dev.schlaubi.tonbrett.client.Tonbrett
 import dev.schlaubi.tonbrett.common.Sound
@@ -43,7 +40,7 @@ fun SoundContainer(api: Tonbrett, state: State.Running, updateState: (State) -> 
     }
 
     LaunchedEffect(onlyMine) {
-        keyEvents.filter { it == Keys.Tab }.collect {
+        keyEvents.filter { it == Keys.TAB }.collect {
             onlyMine = !onlyMine
 
             updateState(state.copy(sounds = api.getSounds(query = search, onlyMine = onlyMine, useUnicode = true)))
@@ -72,7 +69,7 @@ private fun SoundRow(
 
     LaunchedEffect(SoundRowKey(selected, playing)) {
         if (selected) {
-            keyEvents.filter { it == Keys.Enter || it == Keys.Space }.collect {
+            keyEvents.filter { it == Keys.ENTER || it == Keys.SPACE }.collect {
                 if (playing) {
                     api.stop()
                 } else {
@@ -96,8 +93,14 @@ private fun SoundRow(
 
     if (sound.description != null) {
         //TODO: Make this dynamic
-        Text("${sound.name} - ${sound.description?.take(32)}", color, style = textStyle)
+        Row {
+            Text(sound.name, color = color, style = textStyle)
+            Text(" - ", color = color, style = textStyle)
+            if (sound.description != null) {
+                ScrollingText(sound.description.toString(), color = color, style = textStyle)
+            }
+        }
     } else {
-        Text(sound.name, color, style = textStyle)
+        Text(sound.name, color = color, style = textStyle)
     }
 }

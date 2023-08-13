@@ -1,0 +1,16 @@
+[versions]
+kotlin = "1.9.0"
+
+[libraries]
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.7.3" }
+kotlinx-serialization-json-okio = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json-okio", version = "1.6.0-RC" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version="0.4.0" }
+tonbrett-client = { group = "dev.schlaubi.tonbrett", name = "client", version = "1.12.5" }
+okio = { group = "com.squareup.okio", name = "okio", version = "3.5.0" }
+clikt = { group = "com.github.ajalt.clikt", name = "clikt", version = "4.2.0" }
+kotter = { group = "com.varabyte.kotter", name = "kotter", version = "1.1.1" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+mosaic = { id = "com.jakewharton.mosaic", version = "0.8.0" }

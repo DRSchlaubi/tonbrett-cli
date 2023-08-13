@@ -62,7 +62,7 @@ fun Spinner(delay: Duration = 100.milliseconds, color: Color = Color.BrightBlue)
         currentChar = (currentChar + 1) % chars.size
     }
 
-    Text(chars[currentChar].toString(), color)
+    Text(chars[currentChar].toString(), color = color)
 }
 
 /**

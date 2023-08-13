@@ -1,24 +1,29 @@
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package dev.schlaubi.tonbrett.cli.util
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.toKString
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.okio.decodeFromBufferedSource
+import kotlinx.serialization.json.okio.encodeToBufferedSink
 import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
 import okio.buffer
 import okio.use
 import platform.posix.getenv
+import kotlin.experimental.ExperimentalNativeApi
 
 private val fs = FileSystem.SYSTEM
 
-@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class Config(@EncodeDefault(EncodeDefault.Mode.NEVER) val sessionToken: String? = null)
 
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 fun getAppDataFolder(): Path {
     val basePath = when(Platform.osFamily) {
         OsFamily.WINDOWS -> getenv("APPDATA")!!.toKString().toPath()
@@ -33,10 +38,9 @@ fun getConfigFile() = getAppDataFolder() / "config.json"
 fun getConfig(): Config {
     val file = getConfigFile()
     return if (fs.exists(file)) {
-        val string = fs.source(file).buffer().use {source ->
-            source.readUtf8()
+        fs.source(file).buffer().use {source ->
+            Json.decodeFromBufferedSource<Config>(source)
         }
-        Json.decodeFromString<Config>(string)
     } else {
         Config()
     }
@@ -50,6 +54,6 @@ fun saveConfig(config: Config) {
     }
 
     fs.sink(file, mustCreate = false).buffer().use { sink ->
-        sink.writeUtf8(Json.encodeToString(config))
+        Json.encodeToBufferedSink(config, sink)
     }
 }

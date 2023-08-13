@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.Executable
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    kotlin("multiplatform") version "1.8.20"
-    kotlin("plugin.serialization") version "1.8.20"
-    id("com.jakewharton.mosaic") version "0.6.0"
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.plugin.serialization)
+    alias(libs.plugins.mosaic)
 }
 
 group = "dev.schlaubi"
@@ -13,6 +13,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     maven("https://europe-west3-maven.pkg.dev/mik-music/mikbot")
 }
 
@@ -54,7 +55,7 @@ kotlin {
     macosX64 {
         binaries {
             executable {
-                baseName = "tonbrett-cli-maocs-x64"
+                baseName = "tonbrett-cli-macos-x64"
             }
         }
     }
@@ -62,10 +63,13 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
-                implementation("dev.schlaubi.tonbrett:client:1.9.8")
-                implementation("com.squareup.okio:okio:3.3.0")
-                implementation("com.github.ajalt.clikt:clikt:3.5.2")
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.kotlinx.serialization.json.okio)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.tonbrett.client)
+                implementation(libs.okio)
+                implementation(libs.clikt)
+                implementation(libs.kotter)
             }
         }
     }

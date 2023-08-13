@@ -3,19 +3,17 @@ package dev.schlaubi.tonbrett.cli.command
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.github.ajalt.clikt.core.CliktCommand
 import com.jakewharton.mosaic.runMosaicBlocking
-import dev.schlaubi.tonbrett.cli.io.LocalKeyEvents
 import dev.schlaubi.tonbrett.cli.io.ProvideKeyEvents
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filter
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 val LocalExitCode =
-    compositionLocalOf<CompletableDeferred<Int>> { throw UnsupportedOperationException("No default value supported") }
+    staticCompositionLocalOf<CompletableDeferred<Int>> { throw UnsupportedOperationException("No default value supported") }
 
 @Composable
 fun exitProcess(exitCode: Int = 0) = LocalExitCode.current.complete(exitCode)
@@ -66,25 +64,18 @@ abstract class MosaicCommand(
      */
     protected fun exitProcess(exitCode: Int = 0) = errorCode.complete(exitCode)
 
-    final override fun run() = runMosaicBlocking {
-        if (currentContext.invokedSubcommand == null) {
-            setContent {
-                CompositionLocalProvider(LocalExitCode provides errorCode) {
-                    ProvideKeyEvents {
-                        val keyEvents = LocalKeyEvents.current
-                        LaunchedEffect(Unit) {
-                            keyEvents
-                                .filter { it.asciiChar == '' }
-                                .collect {
-                                    exitProcess(1)
-                                }
+    final override fun run() =
+        runMosaicBlocking {
+            if (currentContext.invokedSubcommand == null) {
+                setContent {
+                    CompositionLocalProvider(LocalExitCode provides errorCode) {
+                        ProvideKeyEvents {
+                            Command()
                         }
-                        Command()
                     }
                 }
-            }
 
-            kotlin.system.exitProcess(errorCode.await())
+                kotlin.system.exitProcess(errorCode.await())
+            }
         }
     }
-}

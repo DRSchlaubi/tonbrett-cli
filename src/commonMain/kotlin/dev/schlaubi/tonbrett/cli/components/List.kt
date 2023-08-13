@@ -3,12 +3,10 @@ package dev.schlaubi.tonbrett.cli.components
 import androidx.compose.runtime.*
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Row
-import dev.schlaubi.tonbrett.cli.io.Keys
+import com.varabyte.kotter.foundation.input.Keys
 import dev.schlaubi.tonbrett.cli.io.LocalKeyEvents
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 class ListItemScope(val selected: Boolean)
@@ -27,13 +25,13 @@ fun <T> NavigableList(
 
     LaunchedEffect(items) {
         withContext(Dispatchers.IO) {
-            keyEvents.onEach {
+            keyEvents.collect {
                 when (it) {
-                    Keys.DirectionDown -> {
+                    Keys.DOWN -> {
                         currentSelection = (currentSelection + 1).coerceAtMost(items.lastIndex)
                     }
 
-                    Keys.DirectionUp -> {
+                    Keys.UP -> {
                         currentSelection = (currentSelection - 1).coerceAtLeast(0)
                     }
                 }
@@ -42,7 +40,7 @@ fun <T> NavigableList(
                 } else if (currentHead - 1 == currentSelection) {
                     currentHead = (currentHead - 1).coerceAtLeast(0)
                 }
-            }.launchIn(this)
+            }
         }
     }
 

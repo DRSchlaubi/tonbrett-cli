@@ -5,7 +5,8 @@ import androidx.compose.runtime.LaunchedEffect
 import com.jakewharton.mosaic.ui.Color
 import com.jakewharton.mosaic.ui.Row
 import com.jakewharton.mosaic.ui.Text
-import dev.schlaubi.tonbrett.cli.io.Keys
+import com.varabyte.kotter.foundation.input.CharKey
+import com.varabyte.kotter.foundation.input.Keys
 import dev.schlaubi.tonbrett.cli.io.LocalKeyEvents
 
 @Composable
@@ -19,14 +20,10 @@ fun TextInputField(
     LaunchedEffect(value) {
         keyEvents
             .collect {
-                if (it == Keys.Backspace) {
+                if (it == Keys.BACKSPACE) {
                     updateValue(value.dropLast(1))
-                } else if (it !in listOf(Keys.Enter, Keys.Tab)) {
-                    if (it.asciiChar == null) {
-                        updateValue(value)
-                    } else {
-                        updateValue(value + it.asciiChar)
-                    }
+                } else if (it is CharKey) {
+                    updateValue(value + it.code)
                 }
             }
     }
