@@ -25,7 +25,7 @@ jobs:
           java-version: 22
       - name: Build plugin
         uses: gradle/actions/setup-gradle@v3
-      - run: ./gradlew linkReleasexEcutableMingwX64 linkReleaseExecutableMacosArm64 linkReleaseExecutableMacosX64
+      - run: ./gradlew linkReleaseExecutableMingwX64 linkReleaseExecutableMacosArm64 linkReleaseExecutableMacosX64
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
