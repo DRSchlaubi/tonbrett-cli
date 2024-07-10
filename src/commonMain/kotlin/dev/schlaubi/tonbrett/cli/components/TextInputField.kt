@@ -35,6 +35,6 @@ fun TextInputField(
     if (value.isNotEmpty()) {
         Text(value)
     } else if (placeholder != null) {
-        Text(placeholder, color = Color.BrightBlack)
+        Text(placeholder, color = Color.Disabled)
     }
 }

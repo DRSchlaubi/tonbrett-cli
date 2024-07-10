@@ -20,13 +20,13 @@ import kotlin.time.Duration.Companion.milliseconds
 @Composable
 fun ScrollingText(
     text: String,
-    color: Color? = null,
-    style: TextStyle? = null,
+    color: Color = Color.Unspecified,
+    style: TextStyle = TextStyle.Unspecified,
     size: Int = 32,
     speed: Duration = 500.milliseconds
 ) {
     if (text.length <= size) {
-        Text(text, color = color, style = style)
+        Text(text, color = color, textStyle = style)
     } else {
         var state by remember { mutableStateOf(0) }
         LaunchedEffect(state) {
@@ -40,6 +40,6 @@ fun ScrollingText(
             visibleText
         }
 
-        Text(scrollingText, color = color, style = style)
+        Text(scrollingText, color = color, textStyle = style)
     }
 }

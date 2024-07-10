@@ -19,7 +19,7 @@ fun TonbrettCliApp(mainCommand: MainCommand) {
             exitAfter(exitCode = 1)
             Text("You are currently not logged in, please log in using")
             Spacer()
-            Text("tonbrett-cli login", style = TextStyle.Bold)
+            Text("tonbrett-cli login", textStyle = TextStyle.Bold)
         }
     } else {
         val api = remember { Tonbrett(token, mainCommand.apiUrl) }

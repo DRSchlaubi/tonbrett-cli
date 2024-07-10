@@ -47,8 +47,8 @@ private fun StartAuthorization() {
 }
 
 private sealed interface State {
-    object Loading : State
-    object Success : State
+    data object Loading : State
+    data object Success : State
     data class Failure(val message: String, val status: HttpStatusCode) : State
 }
 

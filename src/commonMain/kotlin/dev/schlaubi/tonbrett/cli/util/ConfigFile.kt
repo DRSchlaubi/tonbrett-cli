@@ -4,21 +4,19 @@ package dev.schlaubi.tonbrett.cli.util
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.toKString
+import kotlinx.io.buffered
+import kotlinx.io.files.Path
+import kotlinx.io.files.SystemFileSystem
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.okio.decodeFromBufferedSource
-import kotlinx.serialization.json.okio.encodeToBufferedSink
-import okio.FileSystem
-import okio.Path
-import okio.Path.Companion.toPath
-import okio.buffer
-import okio.use
+import kotlinx.serialization.json.io.decodeFromSource
+import kotlinx.serialization.json.io.encodeToSink
 import platform.posix.getenv
 import kotlin.experimental.ExperimentalNativeApi
 
-private val fs = FileSystem.SYSTEM
+private val fs = SystemFileSystem
 
 @Serializable
 data class Config(@EncodeDefault(EncodeDefault.Mode.NEVER) val sessionToken: String? = null)
@@ -26,20 +24,20 @@ data class Config(@EncodeDefault(EncodeDefault.Mode.NEVER) val sessionToken: Str
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 fun getAppDataFolder(): Path {
     val basePath = when(Platform.osFamily) {
-        OsFamily.WINDOWS -> getenv("APPDATA")!!.toKString().toPath()
-        OsFamily.MACOSX -> getenv("HOME")!!.toKString().toPath() / "Library" / "Application Support"
-        else -> getenv("HOME")!!.toKString().toPath()
+        OsFamily.WINDOWS -> Path(getenv("APPDATA")!!.toKString())
+        OsFamily.MACOSX -> Path(getenv("HOME")!!.toKString(),  "Library", "Application Support")
+        else -> Path(getenv("HOME")!!.toKString())
     }
-    return basePath / "tonbrett-cli"
+    return Path(basePath, "tonbrett-cli")
 }
 
-fun getConfigFile() = getAppDataFolder() / "config.json"
+fun getConfigFile() = Path(getAppDataFolder(), "config.json")
 
 fun getConfig(): Config {
     val file = getConfigFile()
     return if (fs.exists(file)) {
-        fs.source(file).buffer().use {source ->
-            Json.decodeFromBufferedSource<Config>(source)
+        fs.source(file).buffered().use { source ->
+            Json.decodeFromSource<Config>(source)
         }
     } else {
         Config()
@@ -53,7 +51,7 @@ fun saveConfig(config: Config) {
         fs.createDirectories(parent, mustCreate = false)
     }
 
-    fs.sink(file, mustCreate = false).buffer().use { sink ->
-        Json.encodeToBufferedSink(config, sink)
+    fs.sink(file).buffered().use { sink ->
+        Json.encodeToSink(config, sink)
     }
 }

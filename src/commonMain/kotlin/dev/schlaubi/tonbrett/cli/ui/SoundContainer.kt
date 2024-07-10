@@ -29,21 +29,20 @@ fun SoundContainer(api: Tonbrett, state: State.Running, updateState: (State) -> 
     }
 
     LaunchedEffect(Unit) {
-        updateState(state.copy(sounds = api.getSounds(useUnicode = true)))
+        updateState(state.copy(sounds = api.getSoundList(useUnicode = true)))
         loading = false
     }
 
     LaunchedEffect(Unit) {
         searchFlow.debounce(300.milliseconds).onEach {
-            updateState(state.copy(sounds = api.getSounds(query = it, onlyMine = onlyMine, useUnicode = true)))
+            updateState(state.copy(sounds = api.getSoundList(query = it, onlyMine = onlyMine, useUnicode = true)))
         }.launchIn(this)
     }
 
     LaunchedEffect(onlyMine) {
         keyEvents.filter { it == Keys.TAB }.collect {
             onlyMine = !onlyMine
-
-            updateState(state.copy(sounds = api.getSounds(query = search, onlyMine = onlyMine, useUnicode = true)))
+            updateState(state.copy(sounds = api.getSoundList(query = search, onlyMine = onlyMine, useUnicode = true)))
         }
     }
 
@@ -54,7 +53,7 @@ fun SoundContainer(api: Tonbrett, state: State.Running, updateState: (State) -> 
             NavigableList(state.sounds) {
                 SoundRow(api, it, selected, it.id == state.playingSound)
             }
-            TextInputField(search, ::updateSearch, { Text("Search", style = TextStyle.Bold) }, "Search for sounds")
+            TextInputField(search, ::updateSearch, { Text("Search", textStyle = TextStyle.Bold) }, "Search for sounds")
         }
     }
 }
@@ -85,22 +84,22 @@ private fun SoundRow(
     }
 
     val (color, textStyle) = when {
-        selected && playing -> Color.BrightGreen to TextStyle.Bold
-        selected -> Color.BrightBlue to null
-        playing -> Color.BrightGreen to null
-        else -> null to null
+        selected && playing -> Color.Success to TextStyle.Bold
+        selected -> Color.BrightBlue to TextStyle.Unspecified
+        playing -> Color.Success to TextStyle.Unspecified
+        else -> Color.Unspecified to TextStyle.Unspecified
     }
 
     if (sound.description != null) {
         //TODO: Make this dynamic
         Row {
-            Text(sound.name, color = color, style = textStyle)
-            Text(" - ", color = color, style = textStyle)
+            Text(sound.name, color = color, textStyle = textStyle)
+            Text(" - ", color = color, textStyle = textStyle)
             if (sound.description != null) {
                 ScrollingText(sound.description.toString(), color = color, style = textStyle)
             }
         }
     } else {
-        Text(sound.name, color = color, style = textStyle)
+        Text(sound.name, color = color, textStyle = textStyle)
     }
 }

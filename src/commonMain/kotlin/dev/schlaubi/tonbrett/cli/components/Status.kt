@@ -40,7 +40,7 @@ fun Error(color: Color = Color.Red, content: Content) =
     Status({ Cross(color) }, content)
 
 @Composable
-fun Success(color: Color = Color.BrightGreen, content: Content) =
+fun Success(color: Color = Color.Success, content: Content) =
     Status({ CheckMark(color) }, content)
 
 @Composable
@@ -70,7 +70,7 @@ fun Spinner(delay: Duration = 100.milliseconds, color: Color = Color.BrightBlue)
  * @param color the [Color]
  */
 @Composable
-fun CheckMark(color: Color = Color.BrightGreen) {
+fun CheckMark(color: Color = Color.Success) {
     Text(checkMark.toString(), color = color)
 }
 

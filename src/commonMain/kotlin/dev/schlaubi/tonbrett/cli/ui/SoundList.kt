@@ -111,7 +111,7 @@ fun SoundList(api: Tonbrett) {
             Error {
                 Text("Your session expired, please login again using")
                 Spacer()
-                Text("tonbrett login", style = TextStyle.Bold)
+                Text("tonbrett login", textStyle = TextStyle.Bold)
             }
             exitProcess(1)
         }

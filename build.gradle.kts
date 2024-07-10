@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.plugin.serialization)
-    alias(libs.plugins.mosaic)
+    alias(libs.plugins.kotlin.plugin.compose)
 }
 
 group = "dev.schlaubi"
@@ -13,13 +13,14 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    google()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     maven("https://europe-west3-maven.pkg.dev/mik-music/mikbot")
 }
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default {
+    applyDefaultHierarchyTemplate {
         common {
             group("posix") {
                 withApple()
@@ -28,12 +29,10 @@ kotlin {
         }
     }
 
-    targets {
-        withType<KotlinNativeTarget> {
-            binaries {
-                withType<Executable> {
-                    entryPoint = "dev.schlaubi.tonbrett.cli.main"
-                }
+    targets.withType<KotlinNativeTarget> {
+        binaries {
+            withType<Executable> {
+                entryPoint = "dev.schlaubi.tonbrett.cli.main"
             }
         }
     }
@@ -64,12 +63,13 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.kotlinx.serialization.json.okio)
+                implementation(libs.kotlinx.serialization.json.io)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.tonbrett.client)
-                implementation(libs.okio)
+                implementation(libs.kotlinx.io)
                 implementation(libs.clikt)
                 implementation(libs.kotter)
+                implementation(libs.mosaic.runtime)
             }
         }
     }

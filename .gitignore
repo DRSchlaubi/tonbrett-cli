@@ -141,4 +141,6 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+.kotlin
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij+iml,gradle,kotlin

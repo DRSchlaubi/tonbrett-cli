@@ -16,7 +16,5 @@ class MainCommand : MosaicCommand(name = "tonbrett-cli", invokeWithoutSubcommand
         .default(defaultUrl)
 
     @Composable
-    override fun Command() {
-        TonbrettCliApp(this)
-    }
+    override fun Command() = TonbrettCliApp(this)
 }
